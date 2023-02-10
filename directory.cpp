@@ -41,15 +41,13 @@ default:
 void Commandterm::setTable(){
 
     if(tableCreated == false || foreignTableCreated == false){
-    std::string tableName;
     std::cout << "What would you like to call this table?" << std::endl;
     
     if(tableCreated == false){
 
-        std::cin >> tableName;
+        std::cin >> Commandterm::tableName;
         std::stringstream table1;
-        table1 << "CREATE TABLE " << tableName << ";";
-        std::cout << "option 1 called" << std::endl;
+        table1 << "CREATE TABLE " << Commandterm::tableName << ";";
         *DMV_FILE << table1.str();
         tableCreated = true;
         std::cout << tableCreated << std::endl;
@@ -57,13 +55,12 @@ void Commandterm::setTable(){
         mainMenu();
 
     }else if(foreignTableCreated == false)
-        std::cout << "foregin called" << std::endl;
         std::cin >> foreignTable;
         std::stringstream table2;
-        table2 << "CREATE TABLE " << tableName << ";";
+        table2 << "CREATE TABLE " << Commandterm::foreignTable << ";";
         *DMV_FILE << table2.str();
         foreignTableCreated = true;
-
+        mainMenu();
     }
 
     else{std::cout << "table limit reached." << std::endl;}
@@ -113,7 +110,7 @@ void Commandterm::subAlterTable(std::string& tableAddy){
                 std::cin >> keyName;
                 std::cout << "Length of the VARCAR?" << std::endl;
                 std::cin >> length;
-                modification << "ALTER TABLE " /*add global var here*/ << " ADD " << keyName << " VARCHAR(" << length << ");" << std::endl;
+                modification << "ALTER TABLE " << tableAddy << " ADD " << keyName << " VARCHAR(" << length << ");" << std::endl;
                 *DMV_FILE << modification.str();
                 Commandterm::primaryKeyCheck = true;
                 modification.clear();
@@ -154,7 +151,7 @@ void Commandterm::subAlterTable(std::string& tableAddy){
         break;
     case 'D':
         std::cout << "Adding foreign key...\n";
-                if (Commandterm::primaryKeyCheck == false){
+                if (Commandterm::foreignKeyCheck == false){
 
             std::cout << "Is this a FOREIGN Key of type INT or VARCHAR? Press A for INT and B for VARCHAR" << std::endl;
             switch (choice2)
@@ -184,7 +181,7 @@ void Commandterm::subAlterTable(std::string& tableAddy){
                 break;
             }
 
-        } else {std::cout << "Foreign Key already established" << std::endl;}
+        } else {std::cout << "Foreign Key already established" << std::endl; mainMenu();}
         break;
 
     case 'E':
